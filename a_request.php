@@ -44,7 +44,7 @@ if(!isset($_SESSION['uname']) || !isset($_SESSION['umail'])){
 	$username = "root";
 	$password = "";
 
-		// Create connection
+		// Create connection1
 
 	$conn = mysqli_connect($servername, $username, $password, $database);
 
@@ -75,7 +75,7 @@ if(!isset($_SESSION['uname']) || !isset($_SESSION['umail'])){
 			}
 		}
 	
-		if(isset($_REQUEST['decline'])){			// Fetching variables of the form which travels in URL
+		if(isset($_REQUEST['decline'])){	// Fetching variables of the form which travels in URL
 		$r = $_REQUEST['decline'];
 		$sql = "UPDATE request set status='Decline' WHERE req_no='$r' ;";
 		if(mysqli_query($conn,$query)){
@@ -84,14 +84,18 @@ if(!isset($_SESSION['uname']) || !isset($_SESSION['umail'])){
 		}
 
 	
-	$query = "SELECT * FROM request WHERE status is null ;";
+
+
+	$query = "SELECT users.uname, request.req_no, request.umail, request.item_name, request.qty, request.urgency, request.req_type, request.status
+	FROM request
+	INNER JOIN users ON request.umail=users.umail WHERE status is null ;";
 	$result = mysqli_query($conn,$query);
 	if(mysqli_num_rows($result)==0)
 		echo'<td><center>NO NEW REQUESTS AVAILABLE</center></td>';
 	else{
 		
 	echo'<tr>
-	<th>User Mail</th>
+	<th>User</th>
     <th>Item Name</th>
     <th>Quantity</th>
     <th>Urgency</th>
@@ -102,7 +106,7 @@ if(!isset($_SESSION['uname']) || !isset($_SESSION['umail'])){
 		while($row = mysqli_fetch_assoc($result)) {
 echo '
   <tr>
-	<td>'.$row['umail'].'</td>
+	<td>'.$row['uname'].'</td>
 	<td>'.$row['item_name'].'</td>
     <td>'.$row['qty'].'</td>
     <td>'.$row['urgency'].'</td>
@@ -113,7 +117,7 @@ echo '
 	$res=mysqli_query($conn,$sq);
 
 	if(mysqli_num_rows($res)==0)
-	{echo'<td ><label style="margin-left:12px;">Item absent<label></td>';}
+	{echo'<td ><label style="margin-left:82px;">Item is  absent<label></td>';}
  
     else{
 		$b= mysqli_fetch_assoc($res);
